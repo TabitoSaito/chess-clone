@@ -11,7 +11,6 @@ em = EventManager(ui)
 clock = pygame.time.Clock()
 
 while True:
-
     start = time.time()
 
     ui.update_background()

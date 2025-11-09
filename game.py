@@ -3,12 +3,10 @@ from pieces import PieceManager
 from typing import Literal
 from copy import deepcopy
 
-# (y, x)
 
-
-def get_placement(place: int,
-                  shape: tuple[int, int]
-                  ) -> tuple[tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int]]:
+def get_placement(
+    place: int, shape: tuple[int, int]
+) -> tuple[tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int]]:
     """
     :param place: distance of the left-top piece to the left boarder (e.g. Bishop has place 2)
     :param shape: shape of the board
@@ -34,7 +32,9 @@ def pretty_print_array(array: np.typing.NDArray):
     print()
 
 
-def get_pos_inbetween(pos1: tuple[int, int], pos2: tuple[int, int]) -> list[tuple[int, int]]:
+def get_pos_inbetween(
+    pos1: tuple[int, int], pos2: tuple[int, int]
+) -> list[tuple[int, int]]:
     """
     :param pos1: first position
     :param pos2: second position
@@ -61,7 +61,6 @@ def get_pos_inbetween(pos1: tuple[int, int], pos2: tuple[int, int]) -> list[tupl
 
 
 class GameBoard:
-
     def __init__(self, game_size: int, pm: PieceManager):
         self.game_size = game_size
         self.pm = pm
@@ -69,8 +68,12 @@ class GameBoard:
         self.side = self.board.shape[0] - 1
         self.setup_board()
 
-        self.black_kill_array = np.zeros(shape=(self.game_size, self.game_size), dtype=int)
-        self.white_kill_array = np.zeros(shape=(self.game_size, self.game_size), dtype=int)
+        self.black_kill_array = np.zeros(
+            shape=(self.game_size, self.game_size), dtype=int
+        )
+        self.white_kill_array = np.zeros(
+            shape=(self.game_size, self.game_size), dtype=int
+        )
 
     def setup_board(self):
         self.setup_high_pieces()
@@ -96,10 +99,9 @@ class GameBoard:
         numbercode_array = self.get_en_passant_array(piece, strike_array)
         return numbercode_array
 
-    def get_move_array(self,
-                       piece,
-                       array: np.typing.NDArray = None) \
-            -> np.typing.NDArray:
+    def get_move_array(
+        self, piece, array: np.typing.NDArray = None
+    ) -> np.typing.NDArray:
         """
         :param piece: a Piece object from PieceManager Class (e.g. Tower)
         :param array: an array with Numbercodes, if empty a new one will be made
@@ -107,7 +109,7 @@ class GameBoard:
         """
         if array is None:
             array = np.zeros(shape=(self.game_size, self.game_size), dtype=int)
-            
+
         move_array = array.copy()
         moves = self.cut_list_to_board(piece.possible_pos)
         for move_pos in moves:
@@ -125,7 +127,9 @@ class GameBoard:
 
         return move_array
 
-    def get_strike_array(self, piece, array: np.typing.NDArray = None) -> np.typing.NDArray:
+    def get_strike_array(
+        self, piece, array: np.typing.NDArray = None
+    ) -> np.typing.NDArray:
         """
         :param piece: a Piece object from PieceManager Class (e.g. Tower)
         :param array: an array with Numbercodes, if empty a new one will be made
@@ -152,10 +156,9 @@ class GameBoard:
 
         return strike_array
 
-    def get_en_passant_array(self,
-                             piece,
-                             array: np.typing.NDArray = None) \
-            -> np.typing.NDArray:
+    def get_en_passant_array(
+        self, piece, array: np.typing.NDArray = None
+    ) -> np.typing.NDArray:
         """
         :param piece: a Piece object from PieceManager Class (e.g. Tower)
         :param array: an array with Numbercodes, if empty a new one will be made
@@ -240,8 +243,12 @@ class GameBoard:
         """
         updates the array with all possible strike positions for white and black
         """
-        self.black_kill_array = np.zeros(shape=(self.game_size, self.game_size), dtype=int)
-        self.white_kill_array = np.zeros(shape=(self.game_size, self.game_size), dtype=int)
+        self.black_kill_array = np.zeros(
+            shape=(self.game_size, self.game_size), dtype=int
+        )
+        self.white_kill_array = np.zeros(
+            shape=(self.game_size, self.game_size), dtype=int
+        )
 
         for row in self.board:
             for cell in row:
@@ -351,31 +358,43 @@ class GameBoard:
             elif piece.color == "black":
                 return piece.cur_pos[0] == self.game_size - 1
 
-    def cut_list_to_board(self, pos_list: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    def cut_list_to_board(
+        self, pos_list: list[tuple[int, int]]
+    ) -> list[tuple[int, int]]:
         """
         takes a list of position tuples and cuts everything that is out of bounds
         """
-        new_list = [(x, y) for x, y in pos_list if self.game_size - 1 >= x >= 0 and self.game_size - 1 >= y >= 0]
+        new_list = [
+            (x, y)
+            for x, y in pos_list
+            if self.game_size - 1 >= x >= 0 and self.game_size - 1 >= y >= 0
+        ]
         return new_list
 
-    def cut_dict_to_board(self, pos_dict: dict[tuple[int, int], tuple[int, int]]) -> dict[tuple[int, int], tuple[int, int]]:
+    def cut_dict_to_board(
+        self, pos_dict: dict[tuple[int, int], tuple[int, int]]
+    ) -> dict[tuple[int, int], tuple[int, int]]:
         """
         takes a dict of position tuples and cuts everything that is out of bounds
         """
-        new_dict = {k: v for k, v in pos_dict.items() if self.game_size - 1 >= k[0] >= 0 and self.game_size - 1 >= k[1] >= 0 and
-                    self.game_size - 1 >= v[0] >= 0 and self.game_size - 1 >= v[1] >= 0}
+        new_dict = {
+            k: v
+            for k, v in pos_dict.items()
+            if self.game_size - 1 >= k[0] >= 0
+            and self.game_size - 1 >= k[1] >= 0
+            and self.game_size - 1 >= v[0] >= 0
+            and self.game_size - 1 >= v[1] >= 0
+        }
         return new_dict
 
 
 class Player:
-
     def __init__(self, color):
         self.color: Literal["black", "white"] = color
         self.lost = False
 
 
 class Game:
-
     def __init__(self, game_size: int = 8, high_pieces: dict = None):
         self.pm = PieceManager(pieces=high_pieces)
         self.game_size = game_size
@@ -419,7 +438,10 @@ class Game:
 
         if kings_pos[0] == "killed" or kings_pos[1] == "killed":
             return "both"
-        if self.board.black_kill_array[kings_pos[0]] != 0 and self.board.white_kill_array[kings_pos[1]] != 0:
+        if (
+            self.board.black_kill_array[kings_pos[0]] != 0
+            and self.board.white_kill_array[kings_pos[1]] != 0
+        ):
             return "both"
         if self.board.black_kill_array[kings_pos[0]] != 0:
             return "white"
@@ -456,16 +478,20 @@ class Game:
             return True
         return False
 
-    def get_piece_possible_moves(self, piece, return_type: Literal["list", "array"] = "list") -> np.typing.NDArray | list[tuple[int, int]]:
+    def get_piece_possible_moves(
+        self, piece, return_type: Literal["list", "array"] = "list"
+    ) -> np.typing.NDArray | list[tuple[int, int]]:
         """
         :param piece: a Piece object from PieceManager Class (e.g. Tower)
         :param return_type: specifies the return type of the func
         :returns: an array or a list with possible moves for the piece
         """
         piece_possible_array = piece.numbercode_array.copy()
-        piece_possible_moves = (list(zip(*np.where(piece.numbercode_array == 1))) +
-                                list(zip(*np.where(piece.numbercode_array == 2))) +
-                                list(zip(*np.where(piece.numbercode_array == 3))))
+        piece_possible_moves = (
+            list(zip(*np.where(piece.numbercode_array == 1)))
+            + list(zip(*np.where(piece.numbercode_array == 2)))
+            + list(zip(*np.where(piece.numbercode_array == 3)))
+        )
         piece_possible_moves = [(x.item(), y.item()) for x, y in piece_possible_moves]
 
         remove_list = []
@@ -478,7 +504,9 @@ class Game:
                 piece_possible_array[pos] = 0
                 remove_list.append(pos)
 
-        piece_possible_moves = [item for item in piece_possible_moves if item not in remove_list]
+        piece_possible_moves = [
+            item for item in piece_possible_moves if item not in remove_list
+        ]
 
         if return_type == "array":
             return piece_possible_array
@@ -506,4 +534,3 @@ class Game:
             return False, "white"
         elif white:
             return False, "black"
-

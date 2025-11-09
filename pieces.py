@@ -1,6 +1,5 @@
 from typing import Literal
 import numpy as np
-# (y, x)
 
 
 def invert_pos(pos_list):
@@ -8,12 +7,13 @@ def invert_pos(pos_list):
 
 
 class Piece:
-
-    def __init__(self, possible_pos: list[tuple[int, int]],
-                 possible_strikes: list[tuple[int, int]],
-                 color: Literal["white", "black"],
-                 can_jump=False):
-
+    def __init__(
+        self,
+        possible_pos: list[tuple[int, int]],
+        possible_strikes: list[tuple[int, int]],
+        color: Literal["white", "black"],
+        can_jump=False,
+    ):
         self.cur_pos: tuple[int, int] = (0, 0)
         self.color = color.lower()
         self.can_jump = can_jump
@@ -34,8 +34,13 @@ class Piece:
         x_diff = pos[0] - self.cur_pos[0]
         y_diff = pos[1] - self.cur_pos[1]
 
-        new_possible_pos = [(old_pos[0] + x_diff, old_pos[1] + y_diff) for old_pos in self.possible_pos]
-        new_possible_strikes = [(old_pos[0] + x_diff, old_pos[1] + y_diff) for old_pos in self.possible_strikes]
+        new_possible_pos = [
+            (old_pos[0] + x_diff, old_pos[1] + y_diff) for old_pos in self.possible_pos
+        ]
+        new_possible_strikes = [
+            (old_pos[0] + x_diff, old_pos[1] + y_diff)
+            for old_pos in self.possible_strikes
+        ]
 
         self.possible_pos = new_possible_pos
         self.possible_strikes = new_possible_strikes
@@ -91,7 +96,6 @@ def check_key(dictionary, key, response=None):
 
 
 class PieceManager:
-
     def __init__(self, pieces: dict[object, int] | None = None):
         if pieces:
             self.tower_place = check_key(pieces, self.Rook)
@@ -101,7 +105,9 @@ class PieceManager:
             self.queen_place = check_key(pieces, self.Queen, 3)
             self.king_place = check_key(pieces, self.King, 4)
 
-            self.high_pieces = {k: v for (k, v) in pieces.items() if k != self.King or k != self.Queen}
+            self.high_pieces = {
+                k: v for (k, v) in pieces.items() if k != self.King or k != self.Queen
+            }
         else:
             self.tower_place = 0
             self.knight_place = 1
@@ -117,52 +123,60 @@ class PieceManager:
             }
 
     class Rook(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=gen_possible_pos_tower(),
-                             possible_strikes=gen_possible_pos_tower(),
-                             color=color)
+            super().__init__(
+                possible_pos=gen_possible_pos_tower(),
+                possible_strikes=gen_possible_pos_tower(),
+                color=color,
+            )
             self.sym = "T"
 
     class Knight(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=gen_possible_pos_knight(),
-                             possible_strikes=gen_possible_pos_knight(),
-                             color=color,
-                             can_jump=True)
+            super().__init__(
+                possible_pos=gen_possible_pos_knight(),
+                possible_strikes=gen_possible_pos_knight(),
+                color=color,
+                can_jump=True,
+            )
             self.sym = "N"
             self.moved = False
 
     class Bishop(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=gen_possible_pos_bishop(),
-                             possible_strikes=gen_possible_pos_bishop(),
-                             color=color)
+            super().__init__(
+                possible_pos=gen_possible_pos_bishop(),
+                possible_strikes=gen_possible_pos_bishop(),
+                color=color,
+            )
             self.sym = "B"
 
     class Queen(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=gen_possible_pos_tower()+gen_possible_pos_bishop(),
-                             possible_strikes=gen_possible_pos_tower()+gen_possible_pos_bishop(),
-                             color=color)
+            super().__init__(
+                possible_pos=gen_possible_pos_tower() + gen_possible_pos_bishop(),
+                possible_strikes=gen_possible_pos_tower() + gen_possible_pos_bishop(),
+                color=color,
+            )
             self.sym = "Q"
 
     class King(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=gen_possible_pos_king(),
-                             possible_strikes=gen_possible_pos_king(),
-                             color=color)
+            super().__init__(
+                possible_pos=gen_possible_pos_king(),
+                possible_strikes=gen_possible_pos_king(),
+                color=color,
+            )
             self.sym = "K"
             self.moved = False
 
     class Pawn(Piece):
-
         def __init__(self, color: Literal["white", "black"] = "black"):
-            super().__init__(possible_pos=[(-1, 0), (-2, 0)], possible_strikes=[(-1, 1), (-1, -1)],  color=color)
+            super().__init__(
+                possible_pos=[(-1, 0), (-2, 0)],
+                possible_strikes=[(-1, 1), (-1, -1)],
+                color=color,
+            )
             self.sym = "P"
             self.moved = False
 

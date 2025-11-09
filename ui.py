@@ -20,7 +20,7 @@ BLUE = (0, 0, 255)
 DARK_GREY = (90, 90, 90)
 DARK_BLUE = (11, 11, 255)
 LIGHT_BLUE = (138, 199, 219)
-GREEN = (50,205,50)
+GREEN = (50, 205, 50)
 
 pygame.init()
 
@@ -33,9 +33,7 @@ def next_color(color) -> str:
 
 
 class ObjectManager:
-
     def __init__(self, font_size: int = 36):
-
         self.background_img = pygame.image.load("img/wood-591631_1920.jpg")
         self.setting_button_img = pygame.image.load("img/settings.png")
 
@@ -66,18 +64,20 @@ class ObjectManager:
         button_height = 50
 
         self.fullscreen_font = self.font.render("Fullscreen", True, BLACK)
-        self.fullscreen_button = pygame.Rect((RATIO_SIZE[0] - button_width) / 2,
-                                             (RATIO_SIZE[1] - button_height) / 2 - 30,
-                                             button_width,
-                                             button_height
-                                             )
+        self.fullscreen_button = pygame.Rect(
+            (RATIO_SIZE[0] - button_width) / 2,
+            (RATIO_SIZE[1] - button_height) / 2 - 30,
+            button_width,
+            button_height,
+        )
 
         self.exit_font = self.font.render("Exit", True, BLACK)
-        self.exit_button = pygame.Rect((RATIO_SIZE[0] - button_width) / 2,
-                                       (RATIO_SIZE[1] - button_height) / 2 + 30,
-                                       button_width,
-                                       button_height
-                                       )
+        self.exit_button = pygame.Rect(
+            (RATIO_SIZE[0] - button_width) / 2,
+            (RATIO_SIZE[1] - button_height) / 2 + 30,
+            button_width,
+            button_height,
+        )
 
         self.windowed_font = self.font.render("Windowed", True, BLACK)
         self.windowed_button = self.fullscreen_button.copy()
@@ -107,7 +107,9 @@ class ObjectManager:
         self.exit_font = self.font.render("Exit", True, BLACK)
         self.windowed_font = self.font.render("Windowed", True, BLACK)
 
-    def render_cur_player_fonts(self, cur_player_color: Literal["white", "black"] = "white"):
+    def render_cur_player_fonts(
+        self, cur_player_color: Literal["white", "black"] = "white"
+    ):
         """
         renders player fonts, the current player is writen in green and the other in red
         :param cur_player_color: color of current player
@@ -135,7 +137,6 @@ om = ObjectManager()
 
 
 class Frame(pygame.surface.Surface):
-
     def __init__(self, surface: pygame.Surface):
         self.screen = surface
 
@@ -191,7 +192,6 @@ class Frame(pygame.surface.Surface):
 
 
 class SettingFrame(Frame):
-
     def __init__(self, surface: pygame.Surface):
         super().__init__(surface)
         self.window_type = "window"
@@ -247,8 +247,9 @@ class SettingFrame(Frame):
 
 
 class Tile:
-
-    def __init__(self, screen: pygame.Surface, x: int, y: int, color: Literal["white", "black"]):
+    def __init__(
+        self, screen: pygame.Surface, x: int, y: int, color: Literal["white", "black"]
+    ):
         self.screen = screen
         self.cords = (y, x)
         self.color = color
@@ -276,7 +277,6 @@ class Tile:
 
 
 class GameFrame(Frame):
-
     def __init__(self, surface: pygame.Surface):
         super().__init__(surface)
         self.game = Game()
@@ -314,12 +314,17 @@ class GameFrame(Frame):
         resizes tiles on frame
         """
         self.resize_board()
-        tile_width, tile_height = int(self.board_rect.width / 8), int(self.board_rect.height / 8)
+        tile_width, tile_height = (
+            int(self.board_rect.width / 8),
+            int(self.board_rect.height / 8),
+        )
         for tile in self.tiles:
-            tile.rect = pygame.Rect(self.board_rect[0] + (tile.cords[1] * tile_width),
-                                    self.board_rect[1] + (tile.cords[0] * tile_height),
-                                    tile_width,
-                                    tile_height)
+            tile.rect = pygame.Rect(
+                self.board_rect[0] + (tile.cords[1] * tile_width),
+                self.board_rect[1] + (tile.cords[0] * tile_height),
+                tile_width,
+                tile_height,
+            )
 
     def load_tiles(self):
         """
@@ -369,13 +374,21 @@ class GameFrame(Frame):
 
         self.resize_board()
 
-        tile_width, tile_height = int(self.board_rect.width / 8), int(self.board_rect.height / 8)
-        tile_start = (self.board_rect.center[0] - tile_width * 2, self.board_rect.center[1] - tile_height / 2)
+        tile_width, tile_height = (
+            int(self.board_rect.width / 8),
+            int(self.board_rect.height / 8),
+        )
+        tile_start = (
+            self.board_rect.center[0] - tile_width * 2,
+            self.board_rect.center[1] - tile_height / 2,
+        )
         for tile in self.change_tiles:
-            tile.rect = pygame.Rect(tile_start[0] + tile_width * tile.cords[1],
-                                    tile_start[1],
-                                    tile_width,
-                                    tile_height)
+            tile.rect = pygame.Rect(
+                tile_start[0] + tile_width * tile.cords[1],
+                tile_start[1],
+                tile_width,
+                tile_height,
+            )
             pygame.draw.rect(self.screen, tile.normal_color_code, tile.rect)
             pygame.draw.rect(self.screen, BLACK, tile.rect, 1)
             tile.load_content()
@@ -394,18 +407,22 @@ class GameFrame(Frame):
 
         om.render_cur_player_fonts(self.game.cur_player.color)
 
-        background_white_rect = pygame.Rect(self.white_player_rect.x,
-                                            self.white_player_rect.y,
-                                            om.white_player_font.get_rect().width,
-                                            om.white_player_font.get_rect().height)
+        background_white_rect = pygame.Rect(
+            self.white_player_rect.x,
+            self.white_player_rect.y,
+            om.white_player_font.get_rect().width,
+            om.white_player_font.get_rect().height,
+        )
 
         pygame.draw.rect(self.screen, WHITE, background_white_rect)
         self.screen.blit(om.white_player_font, self.white_player_rect)
 
-        background_black_rect = pygame.Rect(self.black_player_rect.x,
-                                            self.black_player_rect.y,
-                                            om.black_player_font.get_rect().width,
-                                            om.black_player_font.get_rect().height)
+        background_black_rect = pygame.Rect(
+            self.black_player_rect.x,
+            self.black_player_rect.y,
+            om.black_player_font.get_rect().width,
+            om.black_player_font.get_rect().height,
+        )
 
         pygame.draw.rect(self.screen, WHITE, background_black_rect)
         self.screen.blit(om.black_player_font, self.black_player_rect)
@@ -422,10 +439,12 @@ class GameFrame(Frame):
 
         for piece in self.game.killed_white:
             tile = Tile(self.screen, x=cur_col, y=cur_row, color="white")
-            tile.rect = pygame.Rect(start_x + (cur_col * tile_width),
-                                    start_y + (cur_row * tile_height),
-                                    tile_width,
-                                    tile_height)
+            tile.rect = pygame.Rect(
+                start_x + (cur_col * tile_width),
+                start_y + (cur_row * tile_height),
+                tile_width,
+                tile_height,
+            )
             tile.content = piece
             tile.load_content()
 
@@ -443,10 +462,12 @@ class GameFrame(Frame):
 
         for piece in self.game.killed_black:
             tile = Tile(self.screen, x=cur_col, y=cur_row, color="black")
-            tile.rect = pygame.Rect(start_x + (cur_col * tile_width),
-                                    start_y + (cur_row * tile_height),
-                                    tile_width,
-                                    tile_height)
+            tile.rect = pygame.Rect(
+                start_x + (cur_col * tile_width),
+                start_y + (cur_row * tile_height),
+                tile_width,
+                tile_height,
+            )
             tile.content = piece
             tile.load_content()
 
@@ -470,15 +491,18 @@ class GameFrame(Frame):
 
 
 class UiBrain:
-
     def __init__(self):
-        self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF | pygame.RESIZABLE)
+        self.screen = pygame.display.set_mode(
+            WINDOW_SIZE, pygame.DOUBLEBUF | pygame.RESIZABLE
+        )
         Window.from_display_module().maximize()
 
         self.clock = pygame.time.Clock()
         self.tickrate = 60
 
-        self.selected_piece: pieces.Piece = pieces.Piece(possible_pos=[], possible_strikes=[], color="white")
+        self.selected_piece: pieces.Piece = pieces.Piece(
+            possible_pos=[], possible_strikes=[], color="white"
+        )
 
         self.screen.blit(om.background_img, (0, 0))
         self.setting_button_rect: pygame.Rect = om.setting_button.get_rect()
@@ -498,14 +522,19 @@ class UiBrain:
         :param size: size of the window
         """
         if not self.toggle:
-            self.screen = pygame.display.set_mode(size, pygame.DOUBLEBUF | pygame.RESIZABLE)
+            self.screen = pygame.display.set_mode(
+                size, pygame.DOUBLEBUF | pygame.RESIZABLE
+            )
         self.toggle = False
 
     def update_background(self):
         """
         blits the background image on the screen
         """
-        self.screen.blit(pygame.transform.scale(om.background_img, self.screen.get_rect().size), (0, 0))
+        self.screen.blit(
+            pygame.transform.scale(om.background_img, self.screen.get_rect().size),
+            (0, 0),
+        )
 
     def toggle_fullscreen(self):
         """
@@ -513,10 +542,14 @@ class UiBrain:
         """
         if self.setting_frame.window_type == "window":
             Window.from_display_module().restore()
-            self.screen = pygame.display.set_mode((0, 0), pygame.DOUBLEBUF | pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode(
+                (0, 0), pygame.DOUBLEBUF | pygame.FULLSCREEN
+            )
             self.setting_frame.window_type = "fullscreen"
         else:
-            self.screen = pygame.display.set_mode(WINDOW_SIZE, pygame.DOUBLEBUF | pygame.RESIZABLE)
+            self.screen = pygame.display.set_mode(
+                WINDOW_SIZE, pygame.DOUBLEBUF | pygame.RESIZABLE
+            )
             self.setting_frame.window_type = "window"
             Window.from_display_module().maximize()
         self.toggle = True
@@ -532,8 +565,9 @@ class UiBrain:
 
     def check_toggle_clicked(self, pos: tuple[int, int]):
         if self.cur_frame == self.setting_frame:
-            if (self.setting_frame.fullscreen_button.collidepoint(pos) or
-                    self.setting_frame.windowed_button.collidepoint(pos)):
+            if self.setting_frame.fullscreen_button.collidepoint(
+                pos
+            ) or self.setting_frame.windowed_button.collidepoint(pos):
                 self.toggle_fullscreen()
             if self.setting_frame.exit_button.collidepoint(pos):
                 pygame.quit()
@@ -570,11 +604,15 @@ class UiBrain:
         :param pos: new position for the piece
         """
         if not self.game_frame.pawn_reached_end:
-            if pos in self.game_frame.game.get_piece_possible_moves(self.selected_piece):
+            if pos in self.game_frame.game.get_piece_possible_moves(
+                self.selected_piece
+            ):
                 self.game_frame.game.move_piece(self.selected_piece.cur_pos, pos)
                 if self.game_frame.game.board.pawn_reached_end(pos):
                     self.game_frame.pawn_reached_end = True
-                    self.game_frame.changeable_pawn = self.game_frame.game.board.board[pos]
+                    self.game_frame.changeable_pawn = self.game_frame.game.board.board[
+                        pos
+                    ]
 
                 self.unselect_all()
                 if not self.game_frame.pawn_reached_end:
@@ -584,7 +622,9 @@ class UiBrain:
         """
         unselects all pieces
         """
-        self.selected_piece = pieces.Piece(possible_pos=[], possible_strikes=[], color="white")
+        self.selected_piece = pieces.Piece(
+            possible_pos=[], possible_strikes=[], color="white"
+        )
         for tile in self.game_frame.tiles:
             tile.cur_color = tile.normal_color_code
 
@@ -611,9 +651,7 @@ class UiBrain:
 
 
 class EventManager:
-
     def __init__(self, ui: UiBrain):
-
         self.ui = ui
         self.events = []
         self.cur_event = None
@@ -659,8 +697,9 @@ class EventManager:
         if self.cur_event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
 
-            if (self.ui.setting_frame.fullscreen_button.collidepoint(pos) or
-                    self.ui.setting_frame.windowed_button.collidepoint(pos)):
+            if self.ui.setting_frame.fullscreen_button.collidepoint(
+                pos
+            ) or self.ui.setting_frame.windowed_button.collidepoint(pos):
                 self.ui.toggle_fullscreen()
             if self.ui.setting_frame.exit_button.collidepoint(pos):
                 pygame.quit()
@@ -696,6 +735,8 @@ class EventManager:
             pos = pygame.mouse.get_pos()
             for tile in self.ui.game_frame.change_tiles:
                 if tile.rect.collidepoint(pos):
-                    self.ui.game_frame.game.board.replace_pawn(self.ui.game_frame.changeable_pawn, tile.content.sym)
+                    self.ui.game_frame.game.board.replace_pawn(
+                        self.ui.game_frame.changeable_pawn, tile.content.sym
+                    )
                     self.ui.game_frame.pawn_reached_end = False
                     self.ui.game_frame.game.next_player()
